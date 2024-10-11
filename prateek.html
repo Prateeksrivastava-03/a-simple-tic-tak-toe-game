@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe</title>
+  <style>
+	
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 0px;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+      border: 2px solid #000;
+    }
+
+    .cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #F7FFE5;
+      border: 2px solid black;
+    }
+
+    .cell:hover {
+      background-color:#EAB2A0 ;
+    }
+
+    .x {
+      color: #f00;
+    }
+
+    .o {
+      color: #00f;
+    }
+
+    .message {
+      text-align: center;
+      font-size: 32px;
+      margin-top: 20px;
+      float:left;
+    }
+    .heading {
+       text-align: center;
+	background-color:#FFE7CE;
+	margin-up:0px;
+	}
+
+  </style>
+</head>
+<body bgcolor="9AC5F4">
+<h1 class="heading">Tic Tac Toe</h1>
+  <div class="board">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+  </div>
+  <marquee direction="right" behaviour="alternate"><div class="message"></div></marquee>
+
+  <script>
+    // JavaScript code for the game logic
+    document.addEventListener("DOMContentLoaded", function() {
+      const cells = document.querySelectorAll(".cell");
+      let currentPlayer = "X";
+      let gameFinished = false;
+
+      cells.forEach(cell => {
+        cell.addEventListener("click", handleCellClick);
+      });
+
+      function handleCellClick(event) {
+        if (gameFinished || event.target.textContent !== "") {
+          return;
+        }
+
+        event.target.textContent = currentPlayer;
+        event.target.classList.add(currentPlayer.toLowerCase());
+
+        if (checkWin(currentPlayer)) {
+          displayMessage(`Player ${currentPlayer} wins!`);
+          gameFinished = true;
+        } else if (checkDraw()) {
+          displayMessage("It's a draw!");
+          gameFinished = true;
+        } else {
+          currentPlayer = currentPlayer === "X" ? "O" : "X";
+        }
+      }
+
+      function checkWin(player) {
+        const winCombinations = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6]
+        ];
+
+        return winCombinations.some(combination => {
+          return combination.every(index => cells[index].textContent === player);
+        });
+      }
+
+      function checkDraw() {
+        return [...cells].every(cell => cell.textContent !== "");
+      }
+
+      function displayMessage(message) {
+        const messageElement = document.querySelector(".message");
+        messageElement.textContent = message;
+      }
+    });
+</script>
+</body>
+</html>
